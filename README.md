@@ -66,5 +66,5 @@ A Discord bot that allows users to select their timezone by reacting to a messag
 This project is open-source and available under the MIT License.
 
 ## Contributors
-- **Your Name** - [GitHub Profile](https://github.com/your-username)
+- **NightsHigh** - [GitHub Profile](https://github.com/NightsHigh)
 

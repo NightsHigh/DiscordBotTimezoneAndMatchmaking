@@ -23,7 +23,7 @@ client.commands = new Collection();
 
 // Register all your commands
 client.commands.set(pingCommand.data.name, pingCommand);
-client.commands.set(requestTimezoneCommand.data.name, requestTimezoneCommand); // Register timezone command
+client.commands.set(requestTimezoneCommand.data.name, requestTimezoneCommand);
 
 client.once(Events.ClientReady, clientReadyHandler);
 

@@ -1,7 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Client, GatewayIntentBits, Partials, PermissionFlagsBits } = require('discord.js');
+const { PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
+    // Setup how the command looks in the chat
     data: new SlashCommandBuilder()
         .setName('timezone')
         .setDescription('Sends a message where users can react to select their timezone.')
@@ -10,7 +11,7 @@ module.exports = {
     async execute(interaction) {
         try {
             // Defer the reply to acknowledge the interaction
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ ephemeral: true }); //  ephemeral: true } = Only the user who used the command can see the confirmation message
 
             // Send the message where users can react
             const timezoneMessage = await interaction.channel.send(

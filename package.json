@@ -17,6 +17,7 @@
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
     "env": "^0.0.2",
+    "moment-timezone": "^0.5.47",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

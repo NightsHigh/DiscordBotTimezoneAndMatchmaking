@@ -1,20 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const sqlite3 = require('sqlite3').verbose();
 
-// Open (or create) the database file
 const db = new sqlite3.Database('availability.db');
-
-// Create the table if it doesn't exist
-db.serialize(() => {
-    db.run(`
-        CREATE TABLE IF NOT EXISTS availability (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT NOT NULL,
-            start_timestamp INTEGER NOT NULL,
-            end_timestamp INTEGER NOT NULL
-        )
-    `);
-});
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,11 +10,16 @@ module.exports = {
         .addStringOption(option =>
             option.setName('time_range')
                 .setDescription('Your availability in the format <t:START_TIMESTAMP:F> to <t:END_TIMESTAMP:F>')
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('time_zone')
+                .setDescription('Your time zone (e.g., America/New_York, Europe/London)')
                 .setRequired(true)),
 
     async execute(interaction) {
         try {
             const timeRange = interaction.options.getString('time_range');
+            const timeZone = interaction.options.getString('time_zone');
             const regex = /^<t:(\d+):F> to <t:(\d+):F>$/;
             const match = timeRange.match(regex);
 
@@ -46,14 +38,14 @@ module.exports = {
 
             const userId = interaction.user.id;
             db.run(
-                'INSERT INTO availability (user_id, start_timestamp, end_timestamp) VALUES (?, ?, ?)',
-                [userId, startTimestamp, endTimestamp],
+                'INSERT INTO availability (user_id, start_timestamp, end_timestamp, time_zone) VALUES (?, ?, ?, ?)',
+                [userId, startTimestamp, endTimestamp, timeZone],
                 (err) => {
                     if (err) {
                         console.error('Error storing availability:', err);
                         interaction.reply({ content: 'There was an error storing your availability.', ephemeral: true });
                     } else {
-                        interaction.reply({ content: `Your availability has been recorded: ${timeRange}`, ephemeral: true });
+                        interaction.reply({ content: `Your availability has been recorded: ${timeRange} (Time Zone: ${timeZone})`, ephemeral: true });
                     }
                 }
             );
